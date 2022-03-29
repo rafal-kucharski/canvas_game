@@ -7,7 +7,32 @@
     body {
         margin: 0;
     }
+    #score {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        background-color: rgba(0,0,0,.8);
+        color: white;
+        width: 500px;
+        height: 300px;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+    #score p {
+        font-size: 30px;
+    }
+    #score p span {
+        font-weight: bold;
+    }
 </style>
+
+<div id="score">
+    <p>Twój wynik to: <span class="score"></span> punktów.</p>
+    <button onclick="location.reload()">Zagraj ponownie</button>
+</div>
 
 <canvas></canvas>
 
