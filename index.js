@@ -146,8 +146,7 @@ function animate() {
     })
 }
 
-addEventListener('click', (event) => {
-    console.log(projectiles)
+function clickEvent() {
     const angle = Math.atan2(
         event.clientY - canvas.height / 2,
         event.clientX - canvas.width / 2
@@ -164,28 +163,15 @@ addEventListener('click', (event) => {
         5,
         'black',
         veloocity
-    ))
+    )) 
+}
+
+addEventListener('click', (event) => {
+    clickEvent()
 })
 
 addEventListener('touchstart', (event) => {
-    console.log(projectiles)
-    const angle = Math.atan2(
-        event.clientY - canvas.height / 2,
-        event.clientX - canvas.width / 2
-    )
-
-    const veloocity = {
-        x: Math.cos(angle),
-        y: Math.sin(angle)
-    }
-
-    projectiles.push(new Projectile(
-        canvas.width / 2,
-        canvas.height / 2,
-        5,
-        'black',
-        veloocity
-    ))
+    clickEvent()
 })
 
 spawnEnemy()
