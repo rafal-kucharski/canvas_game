@@ -68,13 +68,13 @@ class Enemy {
 
 const x = canvas.width / 2
 const y = canvas.height / 2
-const player = new Player(x, y, 20, 'grey')
+const player = new Player(x, y, 40, 'grey')
 const projectiles = []
 const enemies = []
 
 function spawnEnemy() {
     setInterval(() => {
-        const radius = Math.random() * (30 - 5) + 5
+        const radius = Math.random() * (60 - 20) + 20
         const color = 'red'
 
         let x
