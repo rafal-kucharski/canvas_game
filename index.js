@@ -105,10 +105,11 @@ function spawnEnemy() {
             color,
             veloocity
         ))
-    }, 2000)
+    }, Math.random() * (2000 - 1000) + 1000)
 }
 
 let animationID
+let score = 0
 
 function animate() {
     animationID = requestAnimationFrame(animate)
@@ -119,7 +120,6 @@ function animate() {
 
         if (projectile.x - projectile.radius < 0) {
             setTimeout(() => {
-                console.log('rm')
                 projectiles.splice(index, 1)
             }, 0);
         }
@@ -131,13 +131,15 @@ function animate() {
         const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
         if (dist - enemy.radius - player.radius < 1) {
             cancelAnimationFrame(animationID)
+            alert(`Twój wynik to:  ${Math.round(score)} punktów.`)
         }
 
         projectiles.forEach((projectile, projectileIndex) => {
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
 
             if (dist - enemy.radius - projectile.radius < 1) {
-                setTimeout(() => {    
+                setTimeout(() => {
+                    score += enemy.radius
                     enemies.splice(index, 1)
                     projectiles.splice(projectileIndex, 1)
                 }, 0);
