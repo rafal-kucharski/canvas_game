@@ -68,7 +68,7 @@ class Enemy {
 
 const x = canvas.width / 2
 const y = canvas.height / 2
-const player = new Player(x, y, 40, 'grey')
+const player = new Player(x, y, 30, 'grey')
 const projectiles = []
 const enemies = []
 
