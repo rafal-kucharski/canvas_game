@@ -37,11 +37,9 @@ class Projectile {
     }
 
     update() {
-        console.log('draw')
         this.draw()
         this.x = this.x + this.veloocity.x
         this.y = this.y + this.veloocity.y
-        console.log(this.x, this.y)
     }
 }
 
@@ -117,10 +115,10 @@ function showScore(score) {
         scoreDiv.style.display = 'flex';
     }
     else {
-        scoreDiv.style.display = 'none';
+        scoreDiv.style.display = 'none'
     }
 
-    document.querySelector('.score').innerHTML = score;
+    document.querySelector('.score').innerHTML = score
  }
 
 let animationID
@@ -136,7 +134,7 @@ function animate() {
         if (projectile.x - projectile.radius < 0) {
             setTimeout(() => {
                 projectiles.splice(index, 1)
-            }, 0);
+            }, 0)
         }
     })
 
@@ -157,39 +155,43 @@ function animate() {
                     score += Math.round(enemy.radius)
                     enemies.splice(index, 1)
                     projectiles.splice(projectileIndex, 1)
-                }, 0);
+                }, 0)
             }
         })
     })
 }
 
-['click', 'touchstart'].forEach(eventName => {
-    addEventListener(eventName, (event) => {
+function clickEvent(event) {
 
-        if (eventName === 'touchstart') {
-            event = event.touches[0];
-        }
-    
-        const angle = Math.atan2(
-            event.clientY - canvas.height / 2,
-            event.clientX - canvas.width / 2
-        )
-    
-        const veloocity = {
-            x: Math.cos(angle),
-            y: Math.sin(angle)
-        }
-    
-        projectiles.push(new Projectile(
-            canvas.width / 2,
-            canvas.height / 2,
-            5,
-            'black',
-            veloocity
-        ))
-        return false;
-    }, false)
-})
+    if (event.type !== 'click') {
+        event = event.touches[0]
+    }
+
+    const angle = Math.atan2(
+        event.clientY - canvas.height / 2,
+        event.clientX - canvas.width / 2
+    )
+
+    const veloocity = {
+        x: Math.cos(angle),
+        y: Math.sin(angle)
+    }
+
+    projectiles.push(new Projectile(
+        canvas.width / 2,
+        canvas.height / 2,
+        5,
+        'black',
+        veloocity
+    ))
+
+}
+
+if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+    addEventListener('touchstart', clickEvent, true)
+} else {
+    addEventListener('click', clickEvent, true)
+}
 
 animate()
 spawnEnemy()
