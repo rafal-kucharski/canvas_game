@@ -4,6 +4,7 @@ html, body {
     width:100%;
 }
 body {
+    background-color: #000;
     font-family: 'Montserrat';
     margin: 0;
 }
@@ -27,7 +28,7 @@ canvas {
     display: none;
 }
 #score p {
-    font-size: 30px;
+    font-size: 24px;
 }
 #score p span {
     font-weight: bold;
