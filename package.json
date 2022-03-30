@@ -1,0 +1,16 @@
+{
+  "name": "canvas_game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "http-server -p 8080 build -c-1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicp0nim/canvas_game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
