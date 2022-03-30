@@ -37,9 +37,11 @@ class Projectile {
     }
 
     update() {
+        console.log('draw')
         this.draw()
         this.x = this.x + this.veloocity.x
         this.y = this.y + this.veloocity.y
+        console.log(this.x, this.y)
     }
 }
 
@@ -161,33 +163,33 @@ function animate() {
     })
 }
 
-function clickEvent() {
-    const angle = Math.atan2(
-        event.clientY - canvas.height / 2,
-        event.clientX - canvas.width / 2
-    )
+['click', 'touchstart'].forEach(eventName => {
+    addEventListener(eventName, (event) => {
 
-    const veloocity = {
-        x: Math.cos(angle),
-        y: Math.sin(angle)
-    }
-
-    projectiles.push(new Projectile(
-        canvas.width / 2,
-        canvas.height / 2,
-        5,
-        'black',
-        veloocity
-    )) 
-}
-
-addEventListener('click', (event) => {
-    clickEvent()
+        if (eventName === 'touchstart') {
+            event = event.touches[0];
+        }
+    
+        const angle = Math.atan2(
+            event.clientY - canvas.height / 2,
+            event.clientX - canvas.width / 2
+        )
+    
+        const veloocity = {
+            x: Math.cos(angle),
+            y: Math.sin(angle)
+        }
+    
+        projectiles.push(new Projectile(
+            canvas.width / 2,
+            canvas.height / 2,
+            5,
+            'black',
+            veloocity
+        ))
+        return false;
+    }, false)
 })
 
-addEventListener('touchstart', (event) => {
-    clickEvent()
-})
-
-spawnEnemy()
 animate()
+spawnEnemy()
