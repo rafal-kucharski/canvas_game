@@ -142,13 +142,16 @@ function spawnEnemy() {
 }
 
 function showScore(score) {
-    var scoreDiv = document.querySelector('#score');
+    const scoreDiv = document.querySelector('#score');
+    const scoreLiveDiv = document.querySelector('#score-live');
  
     if(scoreDiv.style.display == '' || scoreDiv.style.display == 'none'){
         scoreDiv.style.display = 'flex';
+        scoreLiveDiv.style.display = 'none';
     }
     else {
-        scoreDiv.style.display = 'none'
+        scoreLiveDiv.style.display = 'none'
+        scoreDiv.style.display = 'flex'
     }
 
     document.querySelector('.score').innerHTML = score
