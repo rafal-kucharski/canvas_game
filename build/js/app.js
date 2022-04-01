@@ -223,7 +223,7 @@ function animate() {
                     )
                 }
 
-                if (enemy.radius - 10 > 5) {
+                if (enemy.radius - 10 > 10) {
                     gsap.to(enemy, {
                         radius: enemy.radius - 10
                     })
@@ -232,7 +232,6 @@ function animate() {
                     }, 0)
                 } else {
                     setTimeout(() => {
-                        hit.currentTime = 0
                         score += Math.round(enemy.baseRadius)
                         updateScore(score)
                         enemies.splice(enemyIndex, 1)
