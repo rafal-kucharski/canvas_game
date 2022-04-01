@@ -107,7 +107,7 @@ const particles = []
 
 function spawnEnemy() {
     setInterval(() => {
-        const radius = Math.random() * (60 - 20) + 20
+        const radius = Math.random() * (80 - 10) + 10
         const color = `hsl(${Math.random() * 360}, 50%, 50%)`
 
         let x
