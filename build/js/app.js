@@ -166,8 +166,6 @@ function showScore(score) {
 let animationID
 let score = 0
 
-const hit = new Audio("audio/hit.wav")
-
 function animate() {
     animationID = requestAnimationFrame(animate)
     c.fillStyle = 'rgba(0, 0, 0, 0.1)'
@@ -209,7 +207,6 @@ function animate() {
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
 
             if (dist - enemy.radius - projectile.radius < 1) {
-                hit.play()
 
                 for (let i = 0; i < enemy.radius * 2; i++) {
                     particles.push(
@@ -231,7 +228,6 @@ function animate() {
                         radius: enemy.radius - 10
                     })
                     setTimeout(() => {
-                        hit.currentTime = 0
                         projectiles.splice(projectileIndex, 1)
                     }, 0)
                 } else {

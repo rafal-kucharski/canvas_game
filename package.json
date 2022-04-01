@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "http-server -p 8080 build -c-1"
+    "serve": "http-server -p 8888 build -c-1"
   },
   "repository": {
     "type": "git",
