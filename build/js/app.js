@@ -21,12 +21,12 @@ class Player {
 }
 
 class Projectile {
-    constructor(x, y, radius, color, veloocity) {
+    constructor(x, y, radius, color, velocity) {
         this.x = x
         this.y = y
         this.radius = radius
         this.color = color
-        this.veloocity = veloocity
+        this.velocity = velocity
     }
 
     draw() {
@@ -38,18 +38,19 @@ class Projectile {
 
     update() {
         this.draw()
-        this.x = this.x + this.veloocity.x
-        this.y = this.y + this.veloocity.y
+        this.x = this.x + this.velocity.x
+        this.y = this.y + this.velocity.y
     }
 }
 
 class Enemy {
-    constructor(x, y, radius, color, veloocity) {
+    constructor(x, y, radius, color, velocity) {
         this.x = x
         this.y = y
         this.radius = radius
+        this.baseRadius = radius
         this.color = color
-        this.veloocity = veloocity
+        this.velocity = velocity
     }
 
     draw() {
@@ -61,21 +62,53 @@ class Enemy {
 
     update() {
         this.draw()
-        this.x = this.x + this.veloocity.x
-        this.y = this.y + this.veloocity.y
+        this.x = this.x + this.velocity.x
+        this.y = this.y + this.velocity.y
+    }
+}
+
+const friction = 0.96
+class Particle {
+    constructor(x, y, radius, color, velocity) {
+        this.x = x
+        this.y = y
+        this.radius = radius
+        this.color = color
+        this.velocity = velocity
+        this.alpha = 1
+    }
+
+    draw() {
+        c.save()
+        c.globalAlpha = this.alpha
+        c.beginPath()
+        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        c.fillStyle = this.color
+        c.fill()
+        c.restore()
+    }
+
+    update() {
+        this.draw()
+        this.velocity.x *= friction
+        this.velocity.y *= friction
+        this.x = this.x + this.velocity.x
+        this.y = this.y + this.velocity.y
+        this.alpha -= 0.01
     }
 }
 
 const x = canvas.width / 2
 const y = canvas.height / 2
-const player = new Player(x, y, 20, 'white')
+const player = new Player(x, y, 10, 'white')
 const projectiles = []
 const enemies = []
+const particles = []
 
 function spawnEnemy() {
     setInterval(() => {
         const radius = Math.random() * (60 - 20) + 20
-        const color = 'red'
+        const color = `hsl(${Math.random() * 360}, 50%, 50%)`
 
         let x
         let y
@@ -105,7 +138,7 @@ function spawnEnemy() {
             color,
             veloocity
         ))
-    }, Math.random() * (2000 - 1000) + 1000)
+    }, Math.random() * (2000 - 1500) + 1500)
 }
 
 function showScore(score) {
@@ -121,24 +154,44 @@ function showScore(score) {
     document.querySelector('.score').innerHTML = score
  }
 
+ function updateScore(score) {
+    var scoreDiv = document.querySelector('#score-live');
+
+    document.querySelector('.score-live').innerHTML = score 
+ }
+
 let animationID
 let score = 0
 
 function animate() {
     animationID = requestAnimationFrame(animate)
-    c.clearRect(0, 0, canvas.width, canvas.height)
+    c.fillStyle = 'rgba(0, 0, 0, 0.1)'
+    c.fillRect(0, 0, canvas.width, canvas.height)
     player.draw()
-    projectiles.forEach((projectile, index) => {
+
+    particles.forEach((particle, particleIndex) => {
+        if (particle.alpha <= 0) {
+            particles.splice(particleIndex, 1)
+        } else {
+            particle.update()
+        }
+    })
+
+    projectiles.forEach((projectile, projectileIndex) => {
         projectile.update()
 
-        if (projectile.x - projectile.radius < 0) {
+        if (projectile.x + projectile.radius < 0 ||
+            projectile.x - projectile.radius > canvas.width ||
+            projectile.y + projectile.radius < 0 ||
+            projectile.y - projectile.radius > canvas.height
+        ) {
             setTimeout(() => {
-                projectiles.splice(index, 1)
+                projectiles.splice(projectileIndex, 1)
             }, 0)
         }
     })
 
-    enemies.forEach((enemy, index) => {
+    enemies.forEach((enemy, enemyIndex) => {
         enemy.update()
 
         const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
@@ -151,11 +204,37 @@ function animate() {
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
 
             if (dist - enemy.radius - projectile.radius < 1) {
-                setTimeout(() => {
-                    score += Math.round(enemy.radius)
-                    enemies.splice(index, 1)
-                    projectiles.splice(projectileIndex, 1)
-                }, 0)
+                for (let i = 0; i < enemy.radius * 2; i++) {
+                    particles.push(
+                        new Particle(
+                            projectile.x, 
+                            projectile.y, 
+                            Math.random() * 2,
+                            enemy.color,
+                            {
+                                x: (Math.random() - 0.5) * (Math.random() * 5),
+                                y: (Math.random() - 0.5) * (Math.random() * 5)
+                            }
+                        )
+                    )
+                }
+
+                if (enemy.radius - 10 > 5) {
+                    gsap.to(enemy, {
+                        radius: enemy.radius - 10
+                    })
+                    setTimeout(() => {
+                        projectiles.splice(projectileIndex, 1)
+                    }, 0)
+                } else {
+                    setTimeout(() => {
+                        score += Math.round(enemy.baseRadius)
+                        console.log(enemy.radius, enemy.baseRadius)
+                        updateScore(score)
+                        enemies.splice(enemyIndex, 1)
+                        projectiles.splice(projectileIndex, 1)
+                    }, 0)
+                }
             }
         })
     })
@@ -173,15 +252,15 @@ function clickEvent(event) {
     )
 
     const veloocity = {
-        x: Math.cos(angle),
-        y: Math.sin(angle)
+        x: Math.cos(angle) * 4,
+        y: Math.sin(angle) * 4
     }
 
     projectiles.push(new Projectile(
         canvas.width / 2,
         canvas.height / 2,
         5,
-        'grey',
+        'white',
         veloocity
     ))
 

@@ -1,16 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap');
+
 html, body {
     height:100%;
     overflow:hidden;
     width:100%;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
 body {
-    background-color: #000;
-    font-family: 'Montserrat';
+    font-family: 'Roboto', sans-serif;
     margin: 0;
 }
 
 canvas {
     touch-action: none;
+}
+
+#score-live {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    position: fixed;
+    color: white;
+    top: 10px;
+    left: 20px;
 }
 
 #score {
